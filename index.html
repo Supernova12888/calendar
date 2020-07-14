@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>2020 Calendar</title>
+        <style>
+            * {
+                font-family: 'verdana', 'calibri', sans-serif;
+                margin: 0px;
+                padding: 0px;
+                box-sizing: border-box;
+            }
+            div#top-bar {
+                background-color: rgb(0, 133, 104);
+                color: white;
+                padding: 12px 18px;
+            }
+            div#top-section {
+                background-color: rgb(0, 194, 168);
+                color: white;
+                text-align: center;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+                width: 100%;
+                padding: 60px 42px;
+            }
+            div#weekdays {
+                background-color: rgb(0, 158, 134);
+                color: rgb(240, 240, 240);
+            }
+            div#weekdays div {
+                text-align: center;
+                display: inline-block;
+                width: 13.1%;
+                padding: 10px 0px;
+            }
+            div#days {
+                background-color: rgb(235, 235, 235);
+                color: rgb(71, 71, 71);
+                padding: 12px 0px;
+            }
+            div#days div:first-child {
+                margin-left: 46%;
+            }
+            div#days div {
+                text-align: center;
+                display: inline-block;
+                width: 6.0%;
+                margin: 12px 4%;
+                padding: 6px;
+                border-radius: 3px;
+                transition: 0.3s;
+            }
+            div#days div:hover {
+                background-color: rgb(201, 201, 201);
+                cursor: default;
+            }
+            div#days div.current-day {
+                background-color: rgb(0, 199, 149);
+                color: white;
+                position: relative;
+            }
+            div#days div.current-day:hover {
+                background-color: rgb(0, 145, 104);
+            }
+        </style>
+    </head>
+    <body style="background-color: rgb(235, 235, 235);">
+        
+        <div id="top-bar">
+            <p id="date">Today is </p>
+        </div>
+        
+        <div id="top-section">
+            <p style="font-size: 36px;">July</p>
+            <p style="font-size: 24px;">2020</p>
+        </div>
+        
+        <div id="weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tues</div>
+            <div>Wed</div>
+            <div>Thurs</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+        
+        <div id="days"></div>
+        
+        <script>
+            var d = new Date();
+            var months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            document.querySelector("#top-bar p#date").innerHTML += weekdays[d.getDay()] + ", " + months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+            document.querySelector("#top-section p:first-child").innerHTML = months[d.getMonth()];
+            document.querySelector("#top-section p:last-child").innerHTML = d.getFullYear();
+            for (var i = 0; i < 31; i++) {
+                if (i == d.getDate() - 1) {
+                    var today = document.createElement("div");
+                    today.innerHTML = d.getDate();
+                    today.setAttribute("title", months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear());
+                    today.className = "current-day";
+                    document.querySelector("#days").appendChild(today);
+                    continue;
+                }
+                var day = document.createElement("div");
+                day.innerHTML = (i + 1).toString();
+                day.setAttribute("title", months[d.getMonth()] + " " + (i + 1) + ", " + d.getFullYear())
+                document.querySelector("#days").appendChild(day);
+            }
+        </script>
+        
+    </body>
+</html>
