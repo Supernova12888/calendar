@@ -104,9 +104,12 @@
                     document.querySelector("#days").appendChild(today);
                     continue;
                 }
+                if (i == 31) {
+                    break;
+                }
                 var day = document.createElement("div");
                 day.innerHTML = (i + 1).toString();
-                day.setAttribute("title", months[d.getMonth()] + " " + (i + 1) + ", " + d.getFullYear())
+                day.setAttribute("title", months[d.getMonth()] + " " + (i + 1) + ", " + d.getFullYear());
                 document.querySelector("#days").appendChild(day);
             }
         </script>
