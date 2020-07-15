@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
     <head>
@@ -123,7 +122,7 @@
         
         <div id="top-bar">
             <p id="date" style="display: inline-block">Today is </p>
-            <p id="right-txt" style="float: right"><span id="settings-btn" onclick="popUp('settings', true);">Settings</span></p>
+            <p id="right-txt" style="float: right"><span id="settings-btn" onclick="popUp('settings', true);" title="Settings">Settings</span></p>
         </div>
         
         <div id="top-section">
@@ -149,12 +148,13 @@
         		<h2 style="display: inline-block;">Settings</h2>
                 <span onclick="popUp('settings', false);"
                 	  class="x-btn"
+                      title="Close settings"
                 	  style="font-size: 30px;
                 			 float: right;
                              margin: -6px -3px;">&times;</span>
                 <hr style="margin: 9px -3px 16px;">
                 <h3>Themes</h3>
-                <pre style="margin-top: 6px;"><span onclick="changeTheme('prev');">&#10094;</span>   <span id="theme">Aqua</span>   <span onclick="changeTheme('next');">&#10095;</span></pre>
+                <pre style="margin-top: 6px;"><span onclick="changeTheme('prev');" id="prev-theme" title="Previous theme">&#10094;</span>   <span id="theme">Aqua</span>   <span onclick="changeTheme('next');" id="next-theme" title="Next theme">&#10095;</span></pre>
             </div>
         </div>
         
@@ -206,17 +206,50 @@
                     divChanged[3][0].style.backgroundColor = "hsl(" + (mainCol - 15) + ", " + sat2 + "%, 48%)";
                     divChanged[3][1].style.backgroundColor = "hsl(" + (mainCol - 15) + ", 70%, 40%)";
                 }
+              	var prevBtn = document.getElementById("prev-theme");
+                var nextBtn = document.getElementById("next-theme");
+                function changeThemeBtn(btn, type) {
+                	if (btn === "prev") {
+                    	if (type === "off") {
+                    		prevBtn.style.color = "gray";
+                        	prevBtn.style.cursor = "default";
+                        	prevBtn.setAttribute("onclick", "");
+                        } else {
+                        	prevBtn.style.color = "black";
+                        	prevBtn.style.cursor = "pointer";
+                        	prevBtn.setAttribute("onclick", "changeTheme('prev');");
+                        }
+                    } else {
+                    	if (type === "off") {
+                    		nextBtn.style.color = "gray";
+                        	nextBtn.style.cursor = "default";
+                        	nextBtn.setAttribute("onclick", "");
+                        } else {
+                        	nextBtn.style.color = "black";
+                        	nextBtn.style.cursor = "pointer";
+                        	nextBtn.setAttribute("onclick", "changeTheme('next');");
+                        }
+                    }
+                }
                 switch (currentTheme) {
                 	case 0:
+                        changeThemeBtn("prev", "off");
+                        changeThemeBtn("next", "on");
                     	changeThemeColor(170);
                         break;
                     case 1:
+                    	changeThemeBtn("prev", "on");
+                        changeThemeBtn("next", "on");
                     	changeThemeColor(20, "fire");
                         break;
                     case 2:
+                    	changeThemeBtn("prev", "on");
+                        changeThemeBtn("next", "on");
                     	changeThemeColor(200);
                         break;
                     case 3:
+                    	changeThemeBtn("prev", "on");
+                        changeThemeBtn("next", "off");
                     	changeThemeColor(280);
                         break;
                 }
@@ -230,6 +263,10 @@
             document.querySelector("#top-bar p#date").innerHTML += weekdays[d.getDay()] + ", " + months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
             document.querySelector("#top-section p:first-child").innerHTML = months[d.getMonth()];
             document.querySelector("#top-section p:last-child").innerHTML = d.getFullYear();
+            var stopingDay;
+            if (d.getMonth == 0 || d.getMonth == 2 || d.getMonth == 4 || d.getMonth == 6 || d.getMonth == 7 || d.getMonth == 9 || d.getMonth == 11) {
+            	stopingDay = 31;
+            }
             for (var i = 0; i < 31; i++) {
                 if (i == d.getDate() - 1) {
                     var today = document.createElement("div");
