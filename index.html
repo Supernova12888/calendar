@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
     <head>
@@ -11,22 +12,29 @@
                 box-sizing: border-box;
             }
             div#top-bar {
-                background-color: rgb(0, 133, 104);
+                background-color: hsl(170, 60%, 33%);
                 color: white;
                 padding: 12px 18px;
+                transition: 0.3s;
+            }
+            div#top-bar p span#settings-btn:hover {
+                text-decoration: underline;
+                cursor: pointer;
             }
             div#top-section {
-                background-color: rgb(0, 194, 168);
+                background-color: hsl(170, 60%, 48%);
                 color: white;
                 text-align: center;
                 text-transform: uppercase;
                 letter-spacing: 3px;
                 width: 100%;
                 padding: 60px 42px;
+                transition: 0.3s;
             }
             div#weekdays {
-                background-color: rgb(0, 158, 134);
+                background-color: hsl(170, 60%, 39%);
                 color: rgb(240, 240, 240);
+                transition: 0.3s;
             }
             div#weekdays div {
                 text-align: center;
@@ -56,13 +64,43 @@
                 background-color: rgb(201, 201, 201);
                 cursor: default;
             }
-            div#days div.current-day {
-                background-color: rgb(0, 199, 149);
+            div#days div#current-day {
+                background-color: hsl(155, 60%, 48%);
                 color: white;
                 position: relative;
             }
-            div#days div.current-day:hover {
-                background-color: rgb(0, 145, 104);
+            div#days div#current-day:hover {
+                background-color: hsl(155, 60%, 40%);
+            }
+            .x-btn:hover {
+            	color: blue;
+                cursor: pointer;
+            }
+            div#settings {
+            	display: none;
+            	transition: 0.36s;
+            }
+            div#settings div#fade {
+            	background-color: rgba(0, 0, 0, 0.84);
+                position: fixed;
+                top: 0px;
+                width: 100vw;
+                height: 100vh;
+            }
+            div#settings div#settings-content {
+            	background-color: white;
+                width: 60vw;
+                position: fixed;
+                top: 0px;
+                margin: 18vh 18vw;
+                padding: 24px 30px;
+                border-radius: 6px;
+                cursor: default;
+            }
+            div#settings div#settings-content pre span:first-child:hover,
+            div#settings div#settings-content pre span:last-child:hover {
+            	color: blue;
+                cursor: pointer;
             }
             @media screen and (max-width: 450px) {
               	div#weekdays div {
@@ -84,12 +122,13 @@
     <body style="background-color: rgb(235, 235, 235);">
         
         <div id="top-bar">
-            <p id="date">Today is </p>
+            <p id="date" style="display: inline-block">Today is </p>
+            <p id="right-txt" style="float: right"><span id="settings-btn" onclick="popUp('settings', true);">Settings</span></p>
         </div>
         
         <div id="top-section">
-            <p style="font-size: 36px;">July</p>
-            <p style="font-size: 24px;">2020</p>
+            <p style="font-size: 36px;"></p>
+            <p style="font-size: 24px;"></p>
         </div>
         
         <div id="weekdays">
@@ -104,6 +143,86 @@
         
         <div id="days"></div>
         
+        <div id="settings">
+        	<div id="fade"></div>
+        	<div id="settings-content">
+        		<h2 style="display: inline-block;">Settings</h2>
+                <span onclick="popUp('settings', false);"
+                	  class="x-btn"
+                	  style="font-size: 30px;
+                			 float: right;
+                             margin: -6px -3px;">&times;</span>
+                <hr style="margin: 9px -3px 16px;">
+                <h3>Themes</h3>
+                <pre style="margin-top: 6px;"><span onclick="changeTheme('prev');">&#10094;</span>   <span id="theme">Aqua</span>   <span onclick="changeTheme('next');">&#10095;</span></pre>
+            </div>
+        </div>
+        
+        <script>
+        	function popUp(type, open) {
+            	var displayObject;
+            	if (type === "settings") {
+                	displayObject = document.querySelector("div#settings");
+                	if (open) {
+                    	displayObject.style.display = "block";
+                    } else {
+                    	displayObject.style.display = "none";
+                    }
+                }
+            }
+          	var currentTheme = 0;
+            function changeTheme(dir) {
+            	var themes = ["Aqua", "Fire", "Ice", "Plum"];
+            	var theme = document.querySelector("div#settings div#settings-content pre span#theme");
+                if (dir === "prev") {
+                	currentTheme--;
+                } else {
+                	currentTheme++;
+                }
+                theme.textContent = themes[currentTheme];
+            }
+            window.setInterval(function() {
+                var divChanged = [
+                	document.getElementById("top-bar"),
+                    document.getElementById("top-section"),
+                    document.getElementById("weekdays"),
+                    [
+                    	document.getElementById("current-day"),
+                        document.querySelector("#current-day:hover")
+                    ]
+                ];
+                function changeThemeColor(mainCol, themeType) {
+                	var sat, sat2;
+                	if (!themeType) {
+                    	sat = 60;
+                        sat2 = 60;
+                    } else if (themeType === "fire") {
+                    	sat = 90
+                        sat2 = 70;
+                    }
+                    divChanged[0].style.backgroundColor = "hsl(" + mainCol + ", " + sat + "%, 33%)";
+                    divChanged[1].style.backgroundColor = "hsl(" + mainCol + ", " + sat + "%, 48%)";
+                    divChanged[2].style.backgroundColor = "hsl(" + mainCol + ", " + sat + "%, 39%)";
+                    divChanged[3][0].style.backgroundColor = "hsl(" + (mainCol - 15) + ", " + sat2 + "%, 48%)";
+                    divChanged[3][1].style.backgroundColor = "hsl(" + (mainCol - 15) + ", 70%, 40%)";
+                }
+                switch (currentTheme) {
+                	case 0:
+                    	changeThemeColor(170);
+                        break;
+                    case 1:
+                    	changeThemeColor(20, "fire");
+                        break;
+                    case 2:
+                    	changeThemeColor(200);
+                        break;
+                    case 3:
+                    	changeThemeColor(280);
+                        break;
+                }
+            }, 1000 / 60);
+        </script>
+        
         <script>
             var d = new Date();
             var months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -116,8 +235,9 @@
                     var today = document.createElement("div");
                     today.innerHTML = d.getDate();
                     today.setAttribute("title", months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear());
-                    today.className = "current-day";
+                    today.id = "current-day";
                     document.querySelector("#days").appendChild(today);
+                    console.log(today);
                     continue;
                 }
                 if (i == 31) {
